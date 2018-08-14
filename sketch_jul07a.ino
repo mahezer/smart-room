@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
-//#include <PubSubClient.h>
+#include <WiFiClient.h>
+#include <PubSubClient.h>
 #include <DHT.h>
 
 #define DHTPIN 0
@@ -15,16 +16,16 @@ float leitura = 0;
 char* ssid = "";
 char* password = "";
 
-//const char* mqttServer = "m10.cloudmqtt.com";
-//const int mqttPort = 15026;
-//const char* mqttUser = "qxuufkxb";
-//const char* mqttPassword = "iz1cz4OG_42S";
-//const char* mqttClientId = "Roland";
+const char* mqttServer = "m10.cloudmqtt.com";
+const int mqttPort = 15026;
+const char* mqttUser = "qxuufkxb";
+const char* mqttPassword = "iz1cz4OG_42S";
+const char* mqttClientId = "Roland";
 
-//char mqttMessage[40];
+char mqttMessage[40];
 
-//WiFiClient wclient;
-//PubSubClient client(mqttServer, mqttPort, wclient);
+WiFiClient wclient;
+PubSubClient client(mqttServer, mqttPort, wclient);
 
 
 void setup() {
@@ -43,9 +44,9 @@ void setup() {
     
   }
 
- // if (client.connect(mqttClientId, mqttUser, mqttPassword)) {
- //   Serial.println("Connected to MQTT...");
- // }
+  if (client.connect(mqttClientId, mqttUser, mqttPassword)) {
+    Serial.println("Connected to MQTT...");
+  }
   
   
   Serial.println('\n');
@@ -53,8 +54,8 @@ void setup() {
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());
 
-  //client.publish("esp/test", "Hello from ESP8266");
-  //client.subscribe("esp/test");
+  client.publish("esp/test", "Hello from ESP8266");
+  client.subscribe("esp/test");
   
   pinMode(energy_ldr, OUTPUT);
   pinMode(energy_dht11, OUTPUT);
@@ -67,29 +68,30 @@ void setup() {
 void loop() {
   digitalWrite(energy_ldr, HIGH);
   leitura = analogRead(sensor);
-//  snprintf(mqttMessage, 40, "LDR = %d", leitura);
-//  if (client.publish("esp/test", mqttMessage)) {
+  delay(50);
+  snprintf(mqttMessage, 40, "LDR = %.2f", leitura);
+  if (client.publish("esp/test", mqttMessage)) {
     Serial.print("LDR = ");
     Serial.println(leitura);
-//  } else {
- //   client.connect(mqttClientId, mqttUser, mqttPassword);
- //   delay(10); 
-//    client.publish("esp/test", mqttMessage);
-//  }
+  } else {
+    client.connect(mqttClientId, mqttUser, mqttPassword);
+    delay(10); 
+    client.publish("esp/test", mqttMessage);
+  }
   digitalWrite(energy_ldr, LOW);
   digitalWrite(energy_lm35, HIGH);
   leitura = ((analogRead(sensor)/1024.0)*3300)/10;
   Serial.print("LM35 - ");
   Serial.println(leitura);
-//  snprintf(mqttMessage, 40, "LM35 = %d", leitura);
- // if (client.publish("esp/test", mqttMessage)) {
-  //  Serial.print("LM35 = ");
-   // Serial.println(mqttMessage);
- // } else {
- //   client.connect(mqttClientId, mqttUser, mqttPassword);
- //   delay(10); 
- //   client.publish("esp/test", mqttMessage);
- // }
+  snprintf(mqttMessage, 40, "LM35 = %.2f", leitura);
+  if (client.publish("esp/test", mqttMessage)) {
+    Serial.print("LM35 = ");
+    Serial.println(leitura);
+  } else {
+    client.connect(mqttClientId, mqttUser, mqttPassword);
+    delay(10); 
+    client.publish("esp/test", mqttMessage);
+  }
   digitalWrite(energy_lm35, LOW);
   digitalWrite(energy_dht11, HIGH);
   delay(200);
@@ -100,15 +102,15 @@ void loop() {
       Serial.print("DHT11: ");
       Serial.println(h);
   }
-//  snprintf(mqttMessage, 40, "DHT11 = %d", h);
-//  if (client.publish("esp/test", mqttMessage)) {
-//    Serial.print("DHT11 = ");
-//    Serial.println(mqttMessage);
- // } else {
- //   client.connect(mqttClientId, mqttUser, mqttPassword);
- //   delay(10); 
- //   client.publish("esp/test", mqttMessage);
- // }
+  snprintf(mqttMessage, 40, "DHT11 = %.2f", h);
+  if (client.publish("esp/test", mqttMessage)) {
+    Serial.print("DHT11 = ");
+    Serial.println(mqttMessage);
+  } else {
+    client.connect(mqttClientId, mqttUser, mqttPassword);
+    delay(10); 
+    client.publish("esp/test", mqttMessage);
+  }
   digitalWrite(energy_dht11, LOW);
   delay(1000);
 }
