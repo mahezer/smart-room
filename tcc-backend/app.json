@@ -1,0 +1,7 @@
+{
+  "name": "Smart Room Server",
+  "description": "TCC",
+  "repository": "http://github.com/sirflyann/smart-room-server",
+  "keywords": ["node", "mqtt", "cloudmqtt"],
+  "image": "heroku/nodejs"
+}

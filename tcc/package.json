@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "homepage": "https://create-react-app-redux.now.sh",
+  "scripts": {
+    "deploy": "now && now alias",
+    "start": "react-scripts start",
+    "now-start": "serve -s ./build",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "precommit": "pretty-quick --staged"
+  },
+  "devDependencies": {
+    "prettier": "1.14.0",
+    "react-scripts": "1.1.4"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel-plugin-recharts": "^1.1.1",
+    "connected-react-router": "4.3.0",
+    "mqtt": "^2.18.7",
+    "react": "16.4.1",
+    "react-dom": "16.4.1",
+    "react-materialize": "^2.3.3",
+    "react-numeric-input": "^2.2.3",
+    "react-redux": "5.0.7",
+    "react-router": "4.3.1",
+    "react-router-dom": "4.3.1",
+    "recharts": "^1.1.0",
+    "redux": "4.0.0",
+    "redux-saga": "^0.16.0",
+    "redux-thunk": "2.3.0",
+    "sanitize.css": "6.0.0",
+    "serve": "9.4.0"
+  }
+}
